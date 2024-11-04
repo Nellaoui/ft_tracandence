@@ -1,0 +1,82 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <script type="module" src="../js/router.js"></script>
+
+    
+</head>
+<body>
+    <styled-chat>hello world</styled-chat>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Room</title>
+  </head>
+  <body>
+    <div class="page-container">
+      <div
+        class="p-4 h-[30rem] w-[40rem] flex flex-col *:p-4 *:rounded-lg"
+      >
+        <div class="hover:bg-black flex gap-4">
+          <div
+            class="w-12 h-12 rounded-full bg-gray-600 flex justify-center items-center cursor-pointer	"
+          >
+            TS
+          </div>
+          <div>
+            <div>Youssef</div>
+            <div class="text-xs">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere
+              officiis illum .
+            </div>
+          </div>
+        </div>
+        <div class="hover:bg-black flex gap-4">
+          <div
+            class="w-12 h-12 rounded-full bg-gray-600 flex justify-center items-center cursor-pointer	"
+          >
+            TS
+          </div>
+          <div>
+            <div>LKbir</div>
+            <div class="text-xs">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere
+              officiis illum .
+            </div>
+          </div>
+        </div>
+        <div class="hover:bg-black flex gap-4">
+          <div
+            class="w-12 h-12 rounded-full bg-gray-600 flex justify-center items-center cursor-pointer	"
+          >
+            TS
+          </div>
+          <div>
+            <div>Sghir</div>
+            <div class="text-xs">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere
+              officiis illum .
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <h1 id="room-header" class="room-header"></h1>
+        <div class="chats-container" id="chats-container"></div>
+        <form action="/" id="msg-form" method="post">
+          <input id="messageInput" type="text" placeholder="Type a message" />
+          <button type="submit">➤</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

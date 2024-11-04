@@ -1,0 +1,349 @@
+<html><head><base href="." />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Leaderboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body {
+        background-color: #333;
+        color: #fff;
+      }
+    
+      .trophy-gold { color: #FFD700; }
+      .trophy-silver { color: #C0C0C0; }
+      .trophy-bronze { color: #CD7F32; }
+      
+      .leaderboard-card {
+        transition: transform 0.2s;
+        background-color: rgba(33, 37, 41, 0.4) !important;
+        color: #fff !important;
+      }
+      
+      .leaderboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      }
+    
+      .card {
+        background-color: rgba(33, 37, 41, 0.4);
+        border: none;
+        color: #fff;
+      }
+    
+      .card-header {
+        background-color: rgba(33, 37, 41, 0.6) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+    
+      .table {
+        color: #fff !important;
+      }
+    
+      .table > :not(caption) > * > * {
+        background-color: transparent;
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+    
+      .player-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: rgba(33, 37, 41, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #fff;
+      }
+    
+      .animate-score {
+        animation: scorePopup 0.5s ease-out;
+      }
+    
+      @keyframes scorePopup {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+      }
+    
+      .table-hover tbody tr:hover {
+        background-color: rgba(33, 37, 41, 0.6);
+      }
+    
+      .text-white {
+        color: #fff !important;
+      }
+    
+      h1, h2, h3, h4, h5, h6, th, td {
+        color: #fff !important;
+      }
+    
+      .table-container {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+    
+      .table-container::-webkit-scrollbar {
+        width: 8px;
+      }
+    
+      .table-container::-webkit-scrollbar-track {
+        background: rgba(33, 37, 41, 0.4);
+      }
+    
+      .table-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+      }
+    
+      .rank-number {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #FFD700;
+      }
+    
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+        
+        h1 {
+          font-size: 1.5rem;
+          margin-bottom: 1rem !important;
+        }
+        
+        .card-header h5 {
+          font-size: 1rem;
+        }
+        
+        .table {
+          font-size: 0.85rem;
+        }
+        
+        .player-avatar {
+          width: 30px;
+          height: 30px;
+          font-size: 0.8rem;
+        }
+        
+        .rank-number {
+          font-size: 1rem;
+        }
+        
+        .table td, .table th {
+          padding: 0.5rem;
+        }
+        
+        .card-body h6 {
+          font-size: 0.8rem;
+        }
+        
+        .card-body h3 {
+          font-size: 1.2rem;
+        }
+      }
+    
+      @media (max-width: 576px) {
+        .table-container {
+          max-height: 300px;
+        }
+        
+        .table {
+          font-size: 0.75rem;
+        }
+        
+        .player-avatar {
+          width: 25px;
+          height: 25px;
+          font-size: 0.7rem;
+          margin-right: 0.3rem !important;
+        }
+        
+        .stats-cards .col-md-4 {
+          margin-bottom: 1rem;
+        }
+        
+        .card-body {
+          padding: 0.75rem;
+        }
+        
+        .table td, .table th {
+          padding: 0.4rem;
+        }
+      }
+    
+      @media (max-width: 480px) {
+        .table th,
+        .table td {
+          display: none;
+        }
+        
+        .table th:nth-child(1),
+        .table td:nth-child(1),
+        .table th:nth-child(2),
+        .table td:nth-child(2) {
+          display: table-cell;
+        }
+        
+        .player-name {
+          max-width: 150px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+    
+        .stats-cards {
+          margin-top: 1rem;
+        }
+    
+        .table-container {
+          max-height: 400px;
+        }
+      }
+    </style>
+    </head>
+    <body>
+    
+    <div class="container py-5">
+      <h1 class="text-center mb-5">🏓 Pong Leaderboard</h1>
+      
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">Top Players</h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-container">
+                <table class="table table-hover mb-0">
+                  <thead>
+                    <tr>
+                      <th class="px-4 sticky-top bg-dark">Rank</th>
+                      <th class="sticky-top bg-dark">Player</th>
+                      <th class="sticky-top bg-dark">Wins</th>
+                      <th class="sticky-top bg-dark">Losses</th>
+                      <th class="sticky-top bg-dark">Win Rate</th>
+                      <th class="sticky-top bg-dark">Score</th>
+                    </tr>
+                  </thead>
+                  <tbody id="leaderboardBody">
+                    <!-- Data will be populated by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+    
+          <div class="row mt-4 stats-cards">
+            <div class="col-md-4 col-sm-6">
+              <div class="card leaderboard-card bg-success text-white mb-3 mb-md-0">
+                <div class="card-body">
+                  <h6>Total Games Played</h6>
+                  <h3 id="totalGames">0</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+              <div class="card leaderboard-card bg-info text-white mb-3 mb-md-0">
+                <div class="card-body">
+                  <h6>Active Players</h6>
+                  <h3 id="activePlayers">0</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+              <div class="card leaderboard-card bg-warning text-white">
+                <div class="card-body">
+                  <h6>Average Win Rate</h6>
+                  <h3 id="avgWinRate">0%</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    const leaderboardData = [
+      { id: 1, name: "John Doe", wins: 150, losses: 30, score: 1500 },
+      { id: 2, name: "Jane Smith", wins: 140, losses: 35, score: 1450 },
+      { id: 3, name: "Bob Johnson", wins: 130, losses: 40, score: 1400 },
+      { id: 4, name: "Alice Brown", wins: 120, losses: 45, score: 1350 },
+      { id: 5, name: "Charlie Wilson", wins: 110, losses: 50, score: 1300 },
+      { id: 6, name: "David Lee", wins: 105, losses: 55, score: 1250 },
+      { id: 7, name: "Eva Garcia", wins: 100, losses: 60, score: 1200 },
+      { id: 8, name: "Frank Martin", wins: 95, losses: 65, score: 1150 },
+      { id: 9, name: "Grace Kim", wins: 90, losses: 70, score: 1100 },
+      { id: 10, name: "Henry Chen", wins: 85, losses: 75, score: 1050 }
+    ];
+    
+    function updateLeaderboard() {
+      const tbody = document.getElementById('leaderboardBody');
+      tbody.innerHTML = '';
+    
+      leaderboardData.forEach((player, index) => {
+        const winRate = ((player.wins / (player.wins + player.losses)) * 100).toFixed(1);
+        const row = document.createElement('tr');
+        
+        let rankDisplay = '';
+        if (index === 0) {
+          rankDisplay = '<i class="fas fa-trophy trophy-gold"></i> <span class="rank-number">1</span>';
+        } else if (index === 1) {
+          rankDisplay = '<i class="fas fa-trophy trophy-silver"></i> <span class="rank-number">2</span>';
+        } else if (index === 2) {
+          rankDisplay = '<i class="fas fa-trophy trophy-bronze"></i> <span class="rank-number">3</span>';
+        } else {
+          rankDisplay = (index + 1).toString();
+        }
+    
+        row.innerHTML = `
+          <td class="px-4">${rankDisplay}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="player-avatar me-2">${player.name.charAt(0)}</div>
+              <span class="player-name">${player.name}</span>
+            </div>
+          </td>
+          <td>${player.wins}</td>
+          <td>${player.losses}</td>
+          <td>${winRate}%</td>
+          <td class="animate-score">${player.score}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    
+      const totalGames = leaderboardData.reduce((acc, player) => acc + player.wins + player.losses, 0);
+      const avgWinRate = leaderboardData.reduce((acc, player) => {
+        return acc + (player.wins / (player.wins + player.losses));
+      }, 0) / leaderboardData.length * 100;
+    
+      document.getElementById('totalGames').textContent = totalGames;
+      document.getElementById('activePlayers').textContent = leaderboardData.length;
+      document.getElementById('avgWinRate').textContent = avgWinRate.toFixed(1) + '%';
+    }
+    
+    // Initial update
+    updateLeaderboard();
+    
+    // Simulate real-time updates every 30 seconds
+    setInterval(() => {
+      leaderboardData.forEach(player => {
+        if (Math.random() > 0.5) {
+          player.wins++;
+          player.score += Math.floor(Math.random() * 10);
+        } else {
+          player.losses++;
+          player.score -= Math.floor(Math.random() * 5);
+        }
+      });
+      
+      leaderboardData.sort((a, b) => b.score - a.score);
+      
+      updateLeaderboard();
+    }, 30000);
+    </script>
+    </body></html>
