@@ -58,10 +58,11 @@ function getRoomName(user1, user2) {
   return roomName;
 }
 async function handleChat() {
-  const user1 = "noaman"; // must to be changed
-  const user2 = "safaa";  // must to be changed
+  const user1 = "safaa"; // must to be changed
+  const user2 = "noaman";  // must to be changed
   const targetRoomNamer = getRoomName(user1, user2);
 
+  console.log("targetRoomNamer", user2);
 
   const targetRoomId = await getRoomId(user2, targetRoomNamer);
   const socketURL = `ws://127.0.0.1:8000/ws/messages/${targetRoomNamer}/`;
@@ -121,15 +122,15 @@ async function handleChat() {
   });
 
   try {
+    console.log("user2", user2);
     const roomsResonse = await fetch(`http://127.0.0.1:8000/api/rooms/${user2}`);
     const rooms = await roomsResonse.json();
+    console.log("rooms", rooms);
     const messagesResonse = await fetch(`http://127.0.0.1:8000/api/messages/${rooms.room_name}`);
     
     const messages = await messagesResonse.json();
-    console.log("messages", messages);
-
       const headerElement = document.getElementById("room-header");
-      headerElement.textContent = `Hello ${user1} & ${user2} ! Welcome to the "${rooms}" Chat Room`;
+      headerElement.textContent = `Hello ${user1} & ${user2} ! Welcome to the "${rooms.room_name}" Chat Room`;
 
       const filteredMessages = messages.filter(
         (msg) =>
