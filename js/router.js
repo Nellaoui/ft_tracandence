@@ -34,6 +34,20 @@ function handleLogin() {
   console.log("login");
 }
 
+async function getRoomId(user2, room_name) {
+  try {
+    const roomsResponsee = await fetch(`http://127.0.0.1:8000/api/rooms/${user2}`);
+    const room = await roomsResponsee.json();
+
+    if (room.room_name === room_name) {
+      return room.id;
+
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
 function getRoomName(user1, user2) {
   if (user1 === user2) {
     throw new Error("User1 and User2 cannot be the same");
@@ -44,10 +58,12 @@ function getRoomName(user1, user2) {
   return roomName;
 }
 async function handleChat() {
-  const targetRoomId = 2;
-  const user1 = "noaman";
-  const user2 = "safaa";
+  const user1 = "noaman"; // must to be changed
+  const user2 = "safaa";  // must to be changed
   const targetRoomNamer = getRoomName(user1, user2);
+
+
+  const targetRoomId = await getRoomId(user2, targetRoomNamer);
   const socketURL = `ws://127.0.0.1:8000/ws/messages/${targetRoomNamer}/`;
   const socket = new WebSocket(socketURL);
   const messageForm = document.getElementById("msg-form");
@@ -104,21 +120,17 @@ async function handleChat() {
     scrollToBottom();
   });
 
-  const targetRoomName = getRoomName(user1, user2);
-  // const targetSenderId = 1;
-  // const sender = 'noaman';
-  // const message = 'hello this is the message';
-  // roomNumber = 2;
-  // const myname = "noaman";
   try {
-    const roomsResonse = await fetch("http://127.0.0.1:8000/api/rooms/");
-    const messagesResonse = await fetch("http://127.0.0.1:8000/api/messages/");
+    const roomsResonse = await fetch(`http://127.0.0.1:8000/api/rooms/${user2}`);
     const rooms = await roomsResonse.json();
+    const messagesResonse = await fetch(`http://127.0.0.1:8000/api/messages/${rooms.room_name}`);
+    
     const messages = await messagesResonse.json();
-    const room = rooms.find((r) => r.id === targetRoomId);
-    if (room) {
+    console.log("messages", messages);
+
       const headerElement = document.getElementById("room-header");
-      headerElement.textContent = `Hello ${room.user1} & ${user2} ! Welcome to the "${room.room_name}" Chat Room`;
+      headerElement.textContent = `Hello ${user1} & ${user2} ! Welcome to the "${rooms}" Chat Room`;
+
       const filteredMessages = messages.filter(
         (msg) =>
           msg.room === targetRoomId &&
@@ -148,7 +160,6 @@ async function handleChat() {
 
       // const form = document.getElementById("msg-form");
       // form.addEventListener("submit", clickForm);
-    }
   } catch (err) {
     console.log(err);
   }
